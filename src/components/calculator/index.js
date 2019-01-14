@@ -41,6 +41,12 @@ export class Calculator extends React.Component {
       this.setState({operator: '/', operand: this.state.value, waitingForOperand: true})
     } else if (value === 'all-clear') {
       this.setState({ value: '0', operand: null, waitingForOperand: false, operator: null });
+    } else if (value === '.') {
+      if (this.state.value.indexOf('.') !== -1) {
+        return false;
+      } else {
+        this.setState({ value: this.state.value + '.' });
+      }
     }
   }
 

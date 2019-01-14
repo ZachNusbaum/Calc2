@@ -1,5 +1,7 @@
 import React from 'react'
 
+import JSONTree from 'react-json-tree'
+
 export class Calculator extends React.Component {
   constructor(props) {
     super(props);
@@ -12,20 +14,18 @@ export class Calculator extends React.Component {
     }
   }
 
-  pressButton = (e) => {
+  pressButton = (e) => { // This function handle all button clicks events.
     let value = e.target.value;
     console.log('Target:', e.target);
-    // If the button is a digit...
-    if (Number.isInteger(parseInt(value))) {
-      this.handleDigit(value);
-    } else if (value === '=') {
-      console.log('Equals!!!');
-      let { value, operator, operand } = this.state;
-      if (this.state.operand === null && this.state.operator === null) {
-        this.setState({ value: this.state.value });
-      } else {
+    if (Number.isInteger(parseInt(value))) { // If the button is a digit...
+      this.handleDigit(value); // Pass the digit to the handleDigit() function.
+    } else if (value === '=') { // If it is the equal button...
+      let { value, operator, operand } = this.state; // Get values from state
+      if (this.state.operand === null && this.state.operator === null) { // No operator/operand are set...
+        this.setState({ value: this.state.value }); // Keep the value the same
+      } else { // Otherwise...
         let calcStr = `${operand} ${operator} ${value}`;
-        let calculation = eval(calcStr);
+        let calculation = String(eval(calcStr));
         this.setState({
           value: calculation,
           waitingForOperand: false,
@@ -82,7 +82,7 @@ export class Calculator extends React.Component {
           <button type="button" className={this.state.operator === '+' ? 'selected operator' : 'operator'} onClick={this.pressButton} value="+">+</button>
           <button type="button" onClick={this.pressButton} className={this.state.operator === '-' ? 'selected operator' : 'operator'} value="-">-</button>
           <button type="button" onClick={this.pressButton} className={this.state.operator === '*' ? 'selected operator' : 'operator'} value="*">*</button>
-          <button type="button" onClick={this.pressButton} cclassName={this.state.operator === '/' ? 'selected operator' : 'operator'} value="/">/</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator === '/' ? 'selected operator' : 'operator'} value="/">/</button>
 
           <button type="button" onClick={this.pressButton} value="7">7</button>
           <button type="button" onClick={this.pressButton} value="8">8</button>
@@ -103,8 +103,8 @@ export class Calculator extends React.Component {
           <button className="equal-sign" onClick={this.pressButton} value="=">=</button>
 
         </div>
+        <JSONTree data={this.state} style={{fontSize: '12pt'}} />
       </div>
-      <pre>{JSON.stringify(this.state)}</pre>
     </>
   }
 }

@@ -7,7 +7,8 @@ export class Calculator extends React.Component {
       value: '0',
       waitingForOperand: false,
       operator: null,
-      operand: null
+      operand: null,
+      history: []
     }
   }
 
@@ -23,22 +24,24 @@ export class Calculator extends React.Component {
       if (this.state.operand === null && this.state.operator === null) {
         this.setState({ value: this.state.value });
       } else {
-        let calculation = eval(`${operand}${operator}${value}`);
+        let calcStr = `${operand} ${operator} ${value}`;
+        let calculation = eval(calcStr);
         this.setState({
           value: calculation,
           waitingForOperand: false,
           operator: null,
-          operand: null
+          operand: null,
+          history: [...this.state.history, `${calcStr} = ${calculation}`]
         })
       }
     } else if (value === '*') {
-      this.setState({operator: '*', operand: this.state.value, waitingForOperand: true})
+      this.handleOperator('*')
     } else if (value === '+') {
-      this.setState({operator: '+', operand: this.state.value, waitingForOperand: true})
+      this.handleOperator('+')
     } else if (value === '-') {
-      this.setState({operator: '-', operand: this.state.value, waitingForOperand: true})
+      this.handleOperator('-')
     } else if (value === '/') {
-      this.setState({operator: '/', operand: this.state.value, waitingForOperand: true})
+      this.handleOperator('/')
     } else if (value === 'all-clear') {
       this.setState({ value: '0', operand: null, waitingForOperand: false, operator: null });
     } else if (value === '.') {
@@ -47,6 +50,14 @@ export class Calculator extends React.Component {
       } else {
         this.setState({ value: this.state.value + '.' });
       }
+    }
+  }
+
+  handleOperator(operator) {
+    if (this.state.operand !== null) {
+      return false;
+    } else {
+      this.setState({operator: operator, operand: this.state.value, waitingForOperand: true})
     }
   }
 
@@ -75,7 +86,7 @@ export class Calculator extends React.Component {
 
           <button type="button" onClick={this.pressButton} value="7">7</button>
           <button type="button" onClick={this.pressButton} value="8">8</button>
-          <button type="button" onClick={this.pressButton} value="7">9</button>
+          <button type="button" onClick={this.pressButton} value="9">9</button>
 
           <button type="button" onClick={this.pressButton} value="4">4</button>
           <button type="button" onClick={this.pressButton} value="5">5</button>

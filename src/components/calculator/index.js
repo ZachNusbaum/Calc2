@@ -20,13 +20,17 @@ export class Calculator extends React.Component {
     } else if (value === '=') {
       console.log('Equals!!!');
       let { value, operator, operand } = this.state;
-      let calculation = eval(`${operand}${operator}${value}`);
-      this.setState({
-        value: calculation,
-        waitingForOperand: false,
-        operator: null,
-        operand: null
-      })
+      if (this.state.operand === null && this.state.operator === null) {
+        this.setState({ value: this.state.value });
+      } else {
+        let calculation = eval(`${operand}${operator}${value}`);
+        this.setState({
+          value: calculation,
+          waitingForOperand: false,
+          operator: null,
+          operand: null
+        })
+      }
     } else if (value === '*') {
       this.setState({operator: '*', operand: this.state.value, waitingForOperand: true})
     } else if (value === '+') {

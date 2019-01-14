@@ -4,8 +4,9 @@ export class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: '0',
       waitingForOperand: false,
+      operator: null,
       operand: null
     }
   }
@@ -18,30 +19,46 @@ export class Calculator extends React.Component {
       this.handleDigit(value);
     } else if (value === '=') {
       console.log('Equals!!!');
+      let { value, operator, operand } = this.state;
+      let calculation = eval(`${operand}${operator}${value}`);
+      this.setState({
+        value: calculation,
+        waitingForOperand: false,
+        operator: null,
+        operand: null
+      })
     } else if (value === '*') {
-      this.setState({operand: '*', waitingForOperand: true})
+      this.setState({operator: '*', operand: this.state.value, waitingForOperand: true})
     } else if (value === '+') {
-      this.setState({operand: '+', waitingForOperand: true})
+      this.setState({operator: '+', operand: this.state.value, waitingForOperand: true})
     } else if (value === '-') {
-      this.setState({operand: '-', waitingForOperand: true})
+      this.setState({operator: '-', operand: this.state.value, waitingForOperand: true})
     } else if (value === '/') {
-      this.setState({operand: '/', waitingForOperand: true})
+      this.setState({operator: '/', operand: this.state.value, waitingForOperand: true})
     } else if (value === 'all-clear') {
-      this.setState({ value: '', operand: null, waitingForOperand: false });
+      this.setState({ value: '0', operand: null, waitingForOperand: false, operator: null });
     }
   }
 
   handleDigit(digit) {
-    this.setState({value: this.state.value + digit})
+    if (this.state.waitingForOperand) {
+      this.setState({value: String(digit), waitingForOperand: false})
+    } else {
+      if (this.state.value.indexOf('0') === -1) {
+        this.setState({ value: this.state.value + String(digit) })
+      } else {
+        this.setState({ value: this.state.value.substr(1) + String(digit) })
+      }
+    }
   }
 
   render() {
     return <>
       <div className="calculator">
-        <input type="text" className="calculator-screen" value="0" disabled />
+        <input type="text" className="calculator-screen" value={this.state.value} disabled />
 
         <div className="calculator-keys">
-          <button type="button" onClick={this.pressButton} className="operator" value="+">+</button>
+          <button type="button" className={this.state.operator === '+' ? 'selected operator' : 'operator'} onClick={this.pressButton} value="+">+</button>
           <button type="button" onClick={this.pressButton} className="operator" value="-">-</button>
           <button type="button" onClick={this.pressButton} className="operator" value="*">*</button>
           <button type="button" onClick={this.pressButton} className="operator" value="/">/</button>

@@ -72,3 +72,11 @@ button:hover {
   grid-gap: 20px;
   padding: 20px;
 }
+
+pre {
+  font-size: 12pt;
+}
+
+.selected {
+  background-color: black;
+}

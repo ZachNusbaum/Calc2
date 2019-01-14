@@ -80,9 +80,9 @@ export class Calculator extends React.Component {
 
         <div className="calculator-keys">
           <button type="button" className={this.state.operator === '+' ? 'selected operator' : 'operator'} onClick={this.pressButton} value="+">+</button>
-          <button type="button" onClick={this.pressButton} className="operator" value="-">-</button>
-          <button type="button" onClick={this.pressButton} className="operator" value="*">*</button>
-          <button type="button" onClick={this.pressButton} className="operator" value="/">/</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator === '-' ? 'selected operator' : 'operator'} value="-">-</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator === '*' ? 'selected operator' : 'operator'} value="*">*</button>
+          <button type="button" onClick={this.pressButton} cclassName={this.state.operator === '/' ? 'selected operator' : 'operator'} value="/">/</button>
 
           <button type="button" onClick={this.pressButton} value="7">7</button>
           <button type="button" onClick={this.pressButton} value="8">8</button>

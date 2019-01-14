@@ -10,7 +10,8 @@ export class Calculator extends React.Component {
       waitingForOperand: false,
       operator: null,
       operand: null,
-      history: []
+      history: [],
+      showingResult: false
     }
   }
 
@@ -31,7 +32,8 @@ export class Calculator extends React.Component {
           waitingForOperand: false,
           operator: null,
           operand: null,
-          history: [...this.state.history, `${calcStr} = ${calculation}`]
+          history: [...this.state.history, `${calcStr} = ${calculation}`],
+          showingResult: true
         })
       }
     } else if (value === '*') {
@@ -62,8 +64,8 @@ export class Calculator extends React.Component {
   }
 
   handleDigit(digit) {
-    if (this.state.waitingForOperand) {
-      this.setState({value: String(digit), waitingForOperand: false})
+    if (this.state.waitingForOperand || this.state.showingResult === true) {
+      this.setState({value: String(digit), waitingForOperand: false, showingResult: false})
     } else {
       if (this.state.value.indexOf('0') === -1) {
         this.setState({ value: this.state.value + String(digit) })

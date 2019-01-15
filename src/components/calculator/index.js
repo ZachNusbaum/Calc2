@@ -22,20 +22,7 @@ export class Calculator extends React.Component {
       this.handleDigit(value); // Pass the digit to the handleDigit() function.
     } else if (value === '=') { // If it is the equal button...
       let { value, operator, operand } = this.state; // Get values from state
-      if (this.state.operand === null && this.state.operator === null) { // No operator/operand are set...
-        this.setState({ value: this.state.value }); // Keep the value the same
-      } else { // Otherwise...
-        let calcStr = `${operand} ${operator} ${value}`;
-        let calculation = String(eval(calcStr));
-        this.setState({
-          value: calculation,
-          waitingForOperand: false,
-          operator: null,
-          operand: null,
-          history: [...this.state.history, `${calcStr} = ${calculation}`],
-          showingResult: true
-        })
-      }
+      this.calculate(operand, operator, value);
     } else if (value === '*') {
       this.handleOperator('*')
     } else if (value === '+') {
@@ -55,10 +42,35 @@ export class Calculator extends React.Component {
     }
   }
 
+  calculate(operand, operator, value) {
+    if (this.state.operand === null && this.state.operator === null) { // No operator/operand are set...
+      this.setState({ value: this.state.value }); // Keep the value the same
+    } else { // Otherwise...
+      let calcStr = `${operand} ${operator} ${value}`;
+      let calculation = String(eval(calcStr));
+      this.setState({
+        value: calculation,
+        waitingForOperand: false,
+        operator: null,
+        operand: null,
+        history: [...this.state.history, `${calcStr} = ${calculation}`],
+        showingResult: true
+      })
+    }
+  }
+
   handleOperator(operator) {
-    if (this.state.operand !== null) {
+    if (this.state.operator !== null && this.state.waitingForOperand === true) {
+      console.log(1)
       return false;
+    } else if (this.state.operator !== null && this.state.waitingForOperand === false) {
+      console.log(2)
+      this.setState({
+        waitingForOperand: true,
+        operand: eval(`${this.state.operand} ${this.state.operator} ${this.state.value}`)
+      })
     } else {
+      console.log(3)
       this.setState({operator: operator, operand: this.state.value, waitingForOperand: true})
     }
   }

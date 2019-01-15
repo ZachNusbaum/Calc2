@@ -65,7 +65,8 @@ export class Calculator extends React.Component {
     } else if (this.state.operator !== null && this.state.waitingForOperand === false) {
       this.setState({
         waitingForOperand: true,
-        operand: eval(`${this.state.operand} ${this.state.operator} ${this.state.value}`)
+        operand: eval(`${this.state.operand} ${this.state.operator} ${this.state.value}`),
+        operator: operator
       })
     } else {
       this.setState({operator: operator, operand: this.state.value, waitingForOperand: true})
@@ -76,9 +77,7 @@ export class Calculator extends React.Component {
     if (this.state.waitingForOperand || this.state.showingResult === true) {
       this.setState({value: String(digit), waitingForOperand: false, showingResult: false})
     } else {
-      if (this.state.value.indexOf('0') === -1) {
-        this.setState({ value: this.state.value + String(digit) })
-      } else if(this.state.value.indexOf('0') === 0) {
+      if(this.state.value.indexOf('0') === 0) {
         this.setState({ value: this.state.value.substr(1) + String(digit) })
       } else {
         this.setState({ value: this.state.value + String(digit) })

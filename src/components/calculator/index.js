@@ -61,16 +61,13 @@ export class Calculator extends React.Component {
 
   handleOperator(operator) {
     if (this.state.operator !== null && this.state.waitingForOperand === true) {
-      console.log(1)
       return false;
     } else if (this.state.operator !== null && this.state.waitingForOperand === false) {
-      console.log(2)
       this.setState({
         waitingForOperand: true,
         operand: eval(`${this.state.operand} ${this.state.operator} ${this.state.value}`)
       })
     } else {
-      console.log(3)
       this.setState({operator: operator, operand: this.state.value, waitingForOperand: true})
     }
   }
@@ -81,8 +78,10 @@ export class Calculator extends React.Component {
     } else {
       if (this.state.value.indexOf('0') === -1) {
         this.setState({ value: this.state.value + String(digit) })
-      } else {
+      } else if(this.state.value.indexOf('0') === 0) {
         this.setState({ value: this.state.value.substr(1) + String(digit) })
+      } else {
+        this.setState({ value: this.state.value + String(digit) })
       }
     }
   }
@@ -93,10 +92,10 @@ export class Calculator extends React.Component {
         <input type="text" className="calculator-screen" value={this.state.value} disabled />
 
         <div className="calculator-keys">
-          <button type="button" className={this.state.operator === '+' ? 'selected operator' : 'operator'} onClick={this.pressButton} value="+">+</button>
-          <button type="button" onClick={this.pressButton} className={this.state.operator === '-' ? 'selected operator' : 'operator'} value="-">-</button>
-          <button type="button" onClick={this.pressButton} className={this.state.operator === '*' ? 'selected operator' : 'operator'} value="*">*</button>
-          <button type="button" onClick={this.pressButton} className={this.state.operator === '/' ? 'selected operator' : 'operator'} value="/">/</button>
+          <button type="button" className={this.state.operator === '+' && this.state.waitingForOperand ? 'selected operator' : 'operator'} onClick={this.pressButton} value="+">+</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator === '-' && this.state.waitingForOperand ? 'selected operator' : 'operator'} value="-">-</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator === '*' && this.state.waitingForOperand ? 'selected operator' : 'operator'} value="*">*</button>
+          <button type="button" onClick={this.pressButton} className={this.state.operator  === '/' && this.state.waitingForOperand ? 'selected operator' : 'operator'} value="/">/</button>
 
           <button type="button" onClick={this.pressButton} value="7">7</button>
           <button type="button" onClick={this.pressButton} value="8">8</button>
